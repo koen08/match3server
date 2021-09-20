@@ -42,9 +42,9 @@ public class AuthorizationService {
     private String cutAuthCode(String authorization) throws CommonException {
         if (authorization.startsWith("Basic")) {
             authorization = authorization.substring(6);
-            /*if (authorization.isBlank()) {
+            if (authorization.isEmpty()) {
                 throw new CommonException("Пустые данные авторизации");
-            }*/
+            }
         } else {
             throw new CommonException("Пустые данные авторизации");
         }
