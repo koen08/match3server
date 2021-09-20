@@ -1,4 +1,5 @@
 package com.game.match3server.exception;
+
 import com.game.match3server.web.GenericResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,8 +38,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         log.error("ERROR: method arguments are not valid: " +
                 fieldErrors.get(FIRST_ERROR_REQUEST).getField().toString() + " = "
                 + errorMsg);
-        GenericResponse<?> genericResponse = new GenericResponse(errorMsg);
-        return new ResponseEntity(genericResponse, BAD_REQUEST);
+        GenericResponse<?> genericResponse = new GenericResponse<>(errorMsg);
+        return new ResponseEntity<>(genericResponse, HttpStatus.OK);
     }
 
     @ResponseStatus(BAD_REQUEST)
@@ -46,6 +47,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<GenericResponse<?>> handleAuthException(CommonException e) {
         GenericResponse<?> genericResponse = new GenericResponse<>(e.getMessage());
         e.printStackTrace();
-        return new ResponseEntity<>(genericResponse, BAD_REQUEST);
+        return new ResponseEntity<>(genericResponse, HttpStatus.OK);
     }
 }
