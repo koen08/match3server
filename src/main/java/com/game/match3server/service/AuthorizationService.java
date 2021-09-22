@@ -6,9 +6,7 @@ import com.game.match3server.dao.entity.UserEntity;
 import com.game.match3server.dao.repo.RoleEntityRepository;
 import com.game.match3server.exception.CommonException;
 import com.game.match3server.security.jwt.JwtProvider;
-import com.game.match3server.web.AnswerResponse;
-import com.game.match3server.web.AuthDto;
-import com.game.match3server.web.Token;
+import com.game.match3server.web.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -28,25 +26,28 @@ public class AuthorizationService {
     @Autowired
     JwtProvider jwtProvider;
 
-    public Token createAuthToken(String authorization) throws CommonException {
+    public AuthUserDto createAuthToken(String authorization) throws CommonException {
         authorization = cutAuthCode(authorization);
         Map<String, String> loginAndPasswordMap = getLoginAndPassword(authorization);
         String login = loginAndPasswordMap.get("login");
         String password = loginAndPasswordMap.get("password");
         UserEntity userEntity = userServiceDao.findByLogin(login);
-        if (userEntity == null) throw new CommonException("Пользователь с таким Email не существует");
-        else if (!checkPasswordUser(password, userEntity)) throw new CommonException("Неверный логин или пароль");
-        return new Token(jwtProvider.generateToken(userEntity.getLogin()), null);
+        if (userEntity == null) throw new CommonException("Email don't found", ErrorCode.UNAUTHORIZED);
+        else if (!checkPasswordUser(password, userEntity)){
+            throw new CommonException("Invalid username or password", ErrorCode.UNAUTHORIZED);
+        }
+        return new AuthUserDto(jwtProvider.generateToken(userEntity.getLogin()), null,
+                new UserTopBar(userEntity.getId(), userEntity.getNickName(), new Random().nextInt(1000), new Random().nextInt(1000)));
     }
 
     private String cutAuthCode(String authorization) throws CommonException {
         if (authorization.startsWith("Basic")) {
             authorization = authorization.substring(6);
             if (authorization.isEmpty()) {
-                throw new CommonException("Пустые данные авторизации");
+                throw new CommonException("Empty authorization data", ErrorCode.BAD_REQUEST);
             }
         } else {
-            throw new CommonException("Пустые данные авторизации");
+            throw new CommonException("Authorization must start with Basic", ErrorCode.BAD_REQUEST);
         }
         return authorization;
     }
@@ -81,10 +82,10 @@ public class AuthorizationService {
             userEntity.setLogin(authDto.getLogin());
             userEntity.setPassword(authDto.getPassword());
             userEntity.setNickName(authDto.getNickName());
-            userEntity.setId(UUID.randomUUID().toString() + new Date());
+            userEntity.setId(UUID.randomUUID().toString() + System.currentTimeMillis());
             userEntity.setPassword(passwordEncoder.encode(userEntity.getPassword()));
             userServiceDao.saveUser(userEntity);
-        } else throw new CommonException("Пользователь с данной электронной почтой существует");
-        return new AnswerResponse("Регистрация прошла успешно");
+        } else throw new CommonException("The user with this email exists", ErrorCode.REPEAT_DATA);
+        return new AnswerResponse("Registration was successful");
     }
 }

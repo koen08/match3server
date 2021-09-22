@@ -2,10 +2,11 @@ package com.game.match3server.web;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
-public class Token {
-    private String authToken;
-    private String refreshToken;
+@NoArgsConstructor
+public class ErrorDto {
+    private String msg;
 }
