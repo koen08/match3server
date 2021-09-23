@@ -42,6 +42,6 @@ public class AdminController {
             return null;
         }
         model.addAttribute("logsList", logsList);
-        return "logs";
+        return "logslist";
     }
 }
