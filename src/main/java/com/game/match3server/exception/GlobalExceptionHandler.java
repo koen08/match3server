@@ -47,7 +47,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(CommonException.class)
     protected ResponseEntity<GenericResponse<?>> handleAuthException(CommonException e) {
         GenericResponse<?> genericResponse = new GenericResponse<>(new ErrorDto(e.getMessage()), e.getCode());
-        e.printStackTrace();
+        log.error("Failed server", e);
         return new ResponseEntity<>(genericResponse, HttpStatus.OK);
     }
 }

@@ -7,6 +7,8 @@ import com.game.match3server.dao.repo.RoleEntityRepository;
 import com.game.match3server.exception.CommonException;
 import com.game.match3server.security.jwt.JwtProvider;
 import com.game.match3server.web.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,6 +19,7 @@ import java.util.*;
 
 @Service
 public class AuthorizationService {
+    private static final Logger log = LogManager.getLogger(AuthorizationService.class);
     @Autowired
     UserServiceDao userServiceDao;
     @Autowired
@@ -27,15 +30,19 @@ public class AuthorizationService {
     JwtProvider jwtProvider;
 
     public AuthUserDto createAuthToken(String authorization) throws CommonException {
+        log.info("createAuthToken: {}", authorization);
         authorization = cutAuthCode(authorization);
         Map<String, String> loginAndPasswordMap = getLoginAndPassword(authorization);
         String login = loginAndPasswordMap.get("login");
         String password = loginAndPasswordMap.get("password");
         UserEntity userEntity = userServiceDao.findByLogin(login);
-        if (userEntity == null) throw new CommonException("Email don't found", ErrorCode.UNAUTHORIZED);
+        if (userEntity == null) {
+            throw new CommonException("Email don't found", ErrorCode.UNAUTHORIZED);
+        }
         else if (!checkPasswordUser(password, userEntity)){
             throw new CommonException("Invalid username or password", ErrorCode.UNAUTHORIZED);
         }
+        log.info("createAuthToken: ok");
         return new AuthUserDto(jwtProvider.generateToken(userEntity.getLogin()), null,
                 new UserTopBar(userEntity.getId(), userEntity.getNickName(), new Random().nextInt(1000), new Random().nextInt(1000)));
     }
