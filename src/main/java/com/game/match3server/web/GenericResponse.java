@@ -16,8 +16,13 @@ public class GenericResponse<T> {
     }
 
     public GenericResponse(T data) {
-        this.data = data;
-        this.status = new Status(ErrorCode.OK, "Ok");
+        if (data instanceof Status){
+            Status status = (Status) data;
+            this.status = new Status(status.getCode(), status.getMessage());
+        } else {
+            this.data = data;
+            this.status = new Status(ErrorCode.OK, "Ok");
+        }
     }
 
     public GenericResponse(T data, String okMsg) {

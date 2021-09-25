@@ -68,7 +68,7 @@ public class AdminController {
     public String removeAll() {
         log.info("start request with GET [/remove/user/all]");
         userServiceDao.removeAll();
-        userServiceDao.removeAll();
+        userProfileDao.removeAll();
         log.info("all user deleted");
         return "removeuser";
     }
