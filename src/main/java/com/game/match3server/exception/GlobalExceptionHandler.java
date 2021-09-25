@@ -1,7 +1,7 @@
 package com.game.match3server.exception;
 
 import com.game.match3server.web.ErrorCode;
-import com.game.match3server.web.ErrorDto;
+import com.game.match3server.web.Status;
 import com.game.match3server.web.GenericResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +20,6 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import java.util.List;
 
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
-
 @ControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
@@ -39,14 +37,14 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         String errorMsg = fieldErrors.get(FIRST_ERROR_REQUEST).getDefaultMessage();
         log.error("ERROR: method arguments are not valid: " +
                 fieldErrors.get(FIRST_ERROR_REQUEST).getField() + " = " + errorMsg);
-        GenericResponse<?> genericResponse = new GenericResponse<>(new Error(errorMsg), ErrorCode.OK);
+        GenericResponse<?> genericResponse = new GenericResponse<>(new Status(ErrorCode.BAD_REQUEST, errorMsg));
         return new ResponseEntity<>(genericResponse, HttpStatus.OK);
     }
 
     @ResponseStatus(HttpStatus.OK)
     @ExceptionHandler(CommonException.class)
     protected ResponseEntity<GenericResponse<?>> handleAuthException(CommonException e) {
-        GenericResponse<?> genericResponse = new GenericResponse<>(new ErrorDto(e.getMessage()), e.getCode());
+        GenericResponse<?> genericResponse = new GenericResponse<>(new Status((int) e.getCode() ,e.getMessage()));
         log.error("Failed server", e);
         return new ResponseEntity<>(genericResponse, HttpStatus.OK);
     }

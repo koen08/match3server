@@ -1,9 +1,9 @@
 package com.game.match3server.web;
 
 public interface ErrorCode {
-    long REPEAT_DATA=100;
-    long OK = 200;
-    long BAD_REQUEST=400;
-    long UNAUTHORIZED=401;
-    long INTERNAL_SERVER_ERROR=500;
+    int REPEAT_DATA=1;
+    int OK = 2;
+    int BAD_REQUEST=3;
+    int UNAUTHORIZED=4;
+    int INTERNAL_SERVER_ERROR=5;
 }

@@ -1,12 +1,13 @@
 package com.game.match3server.service;
 
+import com.game.match3server.dao.UserProfileDao;
 import com.game.match3server.dao.UserServiceDao;
-import com.game.match3server.dao.entity.RoleEntity;
-import com.game.match3server.dao.entity.UserEntity;
+import com.game.match3server.dao.entity.*;
 import com.game.match3server.dao.repo.RoleEntityRepository;
 import com.game.match3server.exception.CommonException;
 import com.game.match3server.security.jwt.JwtProvider;
 import com.game.match3server.web.*;
+import com.google.gson.Gson;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,8 +29,10 @@ public class AuthorizationService {
     RoleEntityRepository roleEntityRepository;
     @Autowired
     JwtProvider jwtProvider;
+    @Autowired
+    UserProfileDao userProfileDao;
 
-    public AuthUserDto createAuthToken(String authorization) throws CommonException {
+    public Object createAuthToken(String authorization) throws CommonException {
         log.info("createAuthToken: {}", authorization);
         authorization = cutAuthCode(authorization);
         Map<String, String> loginAndPasswordMap = getLoginAndPassword(authorization);
@@ -37,10 +40,11 @@ public class AuthorizationService {
         String password = loginAndPasswordMap.get("password");
         UserEntity userEntity = userServiceDao.findByLogin(login);
         if (userEntity == null) {
-            throw new CommonException("Email don't found", ErrorCode.UNAUTHORIZED);
-        }
-        else if (!checkPasswordUser(password, userEntity)){
-            throw new CommonException("Invalid username or password", ErrorCode.UNAUTHORIZED);
+            log.warn("Email don't found");
+            return new Status(ErrorCode.UNAUTHORIZED, "Email don't found");
+        } else if (!checkPasswordUser(password, userEntity)) {
+            log.warn("Invalid username or password");
+            return new Status(ErrorCode.UNAUTHORIZED, "Invalid username or password");
         }
         log.info("createAuthToken: ok");
         return new AuthUserDto(jwtProvider.generateToken(userEntity.getLogin()), null,
@@ -81,7 +85,11 @@ public class AuthorizationService {
         return new String(bytes, StandardCharsets.UTF_8);
     }
 
-    public AnswerResponse createPerson(AuthDto authDto) throws CommonException {
+    public Object createPerson(AuthDto authDto) throws CommonException {
+        if (userServiceDao.getByNickname(authDto.getNickName()) != null){
+            log.warn("The user with this nickname exists");
+            return new Status(ErrorCode.REPEAT_DATA, "The user with this nickname exists");
+        }
         if (userServiceDao.findByLogin(authDto.getLogin()) == null) {
             UserEntity userEntity = new UserEntity();
             RoleEntity userRole = roleEntityRepository.findByName("ROLE_" + authDto.getRole());
@@ -92,7 +100,24 @@ public class AuthorizationService {
             userEntity.setId(UUID.randomUUID().toString() + System.currentTimeMillis());
             userEntity.setPassword(passwordEncoder.encode(userEntity.getPassword()));
             userServiceDao.saveUser(userEntity);
-        } else throw new CommonException("The user with this email exists", ErrorCode.REPEAT_DATA);
+            List<String> towers = new ArrayList<>();
+            Gson gson = new Gson();
+            towers.add(gson.toJson(new TowerUser("Lazer_Twr_Def", 1, 12, (float) 0.45)));
+            towers.add(gson.toJson(new TowerUser("Plasma_DefTwr", 1, 15, (float) 0.8)));
+            List<String> spaceships = new ArrayList<>();
+            List<String> towersShipId = new ArrayList<>();
+            towersShipId.add("Lazer_Twr_Def");
+            spaceships.add(gson.toJson(new SpaceshipInfo("SpaceShip_1", 1, 150, towersShipId.toArray(new String[0]))));
+            UserProfile userProfile = new UserProfile(
+                    userEntity.getId(), 100, 25, "SpaceShip_1", 1, 0,
+                    towers.toArray(new String[0]), spaceships.toArray(new String[0]));
+            userProfileDao.save(userProfile);
+
+        } else {
+            log.warn("The user with this email exists");
+            return new Status(ErrorCode.REPEAT_DATA, "The user with this email exists");
+        }
+        log.info("Registration was successful");
         return new AnswerResponse("Registration was successful");
     }
 }

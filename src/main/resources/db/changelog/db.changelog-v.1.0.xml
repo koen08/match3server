@@ -6,4 +6,5 @@
 
 <include file="2021-01-12-initial-schrema-import.xml" relativeToChangelogFile="true"/>
 <include file="2021-01-12-insert-data-admin.xml" relativeToChangelogFile="true"/>
+    <include file="user-profile-init-24-09-2021.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>

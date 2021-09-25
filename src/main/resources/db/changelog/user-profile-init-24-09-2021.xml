@@ -1,0 +1,41 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.0.xsd">
+
+    <changeSet id="2020-01-13_2" author="konstantin_butusov">
+        <createTable tableName="user_profile">
+            <column name="id" type="VARCHAR(256)">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="coin" type="INT"/>
+            <column name="gems" type="INT"/>
+            <column name="spaceship_active_id" type="varchar(256)"/>
+            <column name="last_level" type="INT"/>
+            <column name="rating" type="INT"/>
+            <column name="towers" type="varchar []">
+                <constraints nullable="false" deleteCascade="true"/>
+            </column>
+            <column name="spaceships" type="varchar []">
+                <constraints nullable="false" deleteCascade="true"/>
+            </column>
+        </createTable>
+
+        <!--<addColumn tableName="auth_user">
+            <column name="user_profile_id" type="VARCHAR(256)">
+                <constraints foreignKeyName="fk_user_profile" referencedTableName="user_profile" referencedColumnNames="id"/>
+            </column>
+        </addColumn>
+
+        <addForeignKeyConstraint baseTableName="user_profile" baseColumnNames="auth_user_id" constraintName="fk_profile_auth_user"
+                                 referencedTableName="auth_user"
+                                 referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="auth_user" baseColumnNames="user_profile_id" constraintName="fk_auth_user_profile"
+                                 referencedTableName="user_profile"
+                                 referencedColumnNames="id"/>-->
+    </changeSet>
+
+
+
+</databaseChangeLog>

@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserEntityRepository extends JpaRepository<UserEntity, String> {
     UserEntity findByLogin(String login);
+    UserEntity findByNickName(String nickname);
 }

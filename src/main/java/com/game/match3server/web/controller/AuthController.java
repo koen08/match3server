@@ -4,6 +4,8 @@ import com.game.match3server.exception.CommonException;
 import com.game.match3server.service.AuthorizationService;
 import com.game.match3server.web.AuthDto;
 import com.game.match3server.web.GenericResponse;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,11 +18,13 @@ import javax.validation.constraints.NotBlank;
 
 @RestController
 public class AuthController {
+    private static final Logger log = LogManager.getLogger(AuthController.class);
     @Autowired
     private AuthorizationService authorizationService;
 
     @PostMapping("/register")
     public ResponseEntity<GenericResponse<?>> registerUser(@Valid @RequestBody AuthDto authDto) throws CommonException {
+        log.info("start request with POST [/register], {}", authDto);
         return new ResponseEntity<>(new GenericResponse<>(
                 authorizationService.createPerson(authDto)), HttpStatus.OK);
     }

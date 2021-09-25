@@ -8,16 +8,20 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class GenericResponse<T> {
-    private long code;
-    T responseData;
+    private Status status;
+    T data;
 
-    public GenericResponse(T responseData, long code) {
-        this.responseData = responseData;
-        this.code = code;
+    public GenericResponse(Status status) {
+        this.status = status;
     }
 
-    public GenericResponse(T responseData) {
-        this.responseData = responseData;
-        this.code = ErrorCode.OK;
+    public GenericResponse(T data) {
+        this.data = data;
+        this.status = new Status(ErrorCode.OK, "Ok");
+    }
+
+    public GenericResponse(T data, String okMsg) {
+        this.data = data;
+        this.status = new Status(ErrorCode.OK, okMsg);
     }
 }
