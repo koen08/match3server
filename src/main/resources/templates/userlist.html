@@ -1,0 +1,14 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <title>Getting Started: Serving Web Content1</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+<!--<a th:href="@{'/remove/' + ${book.id}}">Delete</a>-->
+<!--<a th:href="@{/remove/{bookId}(bookId=${book.id})}">Delete</a>-->
+<ul th:each="userList, stat : ${userList}">
+    <li th:text="${userList}"></li>
+</ul>
+</body>
+</html>

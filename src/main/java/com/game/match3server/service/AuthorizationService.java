@@ -47,8 +47,7 @@ public class AuthorizationService {
             return new Status(ErrorCode.UNAUTHORIZED, "Invalid username or password");
         }
         log.info("createAuthToken: ok");
-        return new AuthUserDto(jwtProvider.generateToken(userEntity.getLogin()), null,
-                new UserTopBar(userEntity.getId(), userEntity.getNickName(), new Random().nextInt(1000), new Random().nextInt(1000)));
+        return new AuthUserDto(jwtProvider.generateToken(userEntity.getLogin()), null);
     }
 
     private String cutAuthCode(String authorization) throws CommonException {

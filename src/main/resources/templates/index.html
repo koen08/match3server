@@ -1,0 +1,23 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <title>Getting Started: Serving Web Content1</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+<h1>Добро пожаловать в админ панель</h1>
+<!--<a th:href="@{'/remove/' + ${book.id}}">Delete</a>-->
+<!--<a th:href="@{/remove/{bookId}(bookId=${book.id})}">Delete</a>-->
+<ul>
+    <li>
+        <a th:href="@{'/admin/logs'}">Logs server</a>
+    </li>
+    <li>
+        <a th:href="@{'/admin/user/all'}">Get all user</a>
+    </li>
+    <li>
+        <a th:href="@{'/remove/user/all'}">Remove user all</a>
+    </li>
+</ul>
+</body>
+</html>

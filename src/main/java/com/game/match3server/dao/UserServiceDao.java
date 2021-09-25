@@ -8,6 +8,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -36,6 +37,13 @@ public class UserServiceDao {
 
     public void removeUser(String id) {
         userEntityRepository.deleteById(id);
+    }
+    public void removeAll(){
+        userEntityRepository.deleteAll();
+    }
+
+    public List<UserEntity> getAllUser(){
+        return userEntityRepository.findAll();
     }
 
     public UserEntity getUserByJwt() {

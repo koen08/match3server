@@ -22,4 +22,7 @@ public class UserProfileDao {
         Optional<UserProfile> userProfile = userProfileRepository.findById(id);
         return userProfile.get();
     }
+    public void removeAll(){
+        userProfileRepository.deleteAll();
+    }
 }
