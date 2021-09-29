@@ -35,7 +35,7 @@ public class UserService {
     private UserProfileDto getUserProfile(UserEntity userEntity) {
         UserProfile userProfile = userProfileDao.getByUserId(userEntity.getId());
         return new UserProfileDto(
-                userEntity.getId(), userProfile.getCoin(), userProfile.getGems(), userProfile.getSpaceShipActiveId(),
+                userEntity.getId(), userEntity.getLogin(), userEntity.getNickName(), userProfile.getCoin(), userProfile.getGems(), userProfile.getSpaceShipActiveId(),
                 userProfile.getLastLevel(), userProfile.getRating(), createTowerList(userProfile.getTowers()),
                 createSpaceShipInfo(userProfile.getSpaceships())
         );

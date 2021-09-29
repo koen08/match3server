@@ -13,6 +13,8 @@ import java.util.List;
 @NoArgsConstructor
 public class UserProfileDto {
     private String id;
+    private String email;
+    private String nickname;
     private int coin;
     private int gems;
     private String spaceShipActiveId;
