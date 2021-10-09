@@ -8,6 +8,7 @@ import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "user_profile")
@@ -32,9 +33,12 @@ public class UserProfile {
     @Column
     private int rating;
     @Column(name = "towers", columnDefinition = "text[]")
-    @Type( type = "string-array" )
+    @Type(type = "string-array")
     private String[] towers;
     @Column(name = "spaceships", columnDefinition = "text[]")
-    @Type( type = "string-array" )
+    @Type(type = "string-array")
     private String[] spaceships;
+    @Column(name = "friends", columnDefinition = "text[]")
+    @Type(type = "string-array")
+    private String[] friends;
 }

@@ -109,7 +109,7 @@ public class AuthorizationService {
             spaceships.add(gson.toJson(new SpaceshipInfo("SpaceShip_1", 1, 150, towersShipId.toArray(new String[0]))));
             UserProfile userProfile = new UserProfile(
                     userEntity.getId(), 100, 25, "SpaceShip_1", 1, 0,
-                    towers.toArray(new String[0]), spaceships.toArray(new String[0]));
+                    towers.toArray(new String[0]), spaceships.toArray(new String[0]), null);
             userProfileDao.save(userProfile);
 
         } else {

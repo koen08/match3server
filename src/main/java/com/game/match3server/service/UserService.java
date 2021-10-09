@@ -6,11 +6,13 @@ import com.game.match3server.dao.entity.SpaceshipInfo;
 import com.game.match3server.dao.entity.TowerUser;
 import com.game.match3server.dao.entity.UserEntity;
 import com.game.match3server.dao.entity.UserProfile;
+import com.game.match3server.web.UserPage;
 import com.game.match3server.web.UserProfileDto;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,8 +30,21 @@ public class UserService {
         return getUserProfile(userServiceDao.getByNickname(nickname));
     }
 
+    public UserPage getUserPage(String nickname) {
+        UserEntity userEntity = userServiceDao.getByNickname(nickname);
+        if (userEntity == null){
+            return null;
+        }
+        return new UserPage(userEntity.getLogin(), userEntity.getNickName());
+    }
+
     public UserProfileDto getUserProfile() {
         return getUserProfile(userServiceDao.getUserByJwt());
+    }
+
+    public UserProfileDto getUserProfileByNickNameWithAuth(Principal principal) {
+        UserEntity userEntity = userServiceDao.findByLogin(principal.getName());
+        return getUserProfile(userEntity.getNickName());
     }
 
     private UserProfileDto getUserProfile(UserEntity userEntity) {

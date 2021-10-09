@@ -36,6 +36,12 @@
                                  referencedColumnNames="id"/>-->
     </changeSet>
 
-
+    <changeSet id="2021-09-10" author="konstantin_butusov">
+        <addColumn tableName="user_profile">
+            <column name="friends" type="varchar []">
+                <constraints nullable="true" deleteCascade="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
 
 </databaseChangeLog>

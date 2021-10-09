@@ -15,6 +15,12 @@ public class GenericResponse<T> {
         this.status = status;
     }
 
+    public GenericResponse(Boolean ok){
+        if (ok){
+            this.status = new Status(ErrorCode.OK, "Ok");
+        }
+    }
+
     public GenericResponse(T data) {
         if (data instanceof Status){
             Status status = (Status) data;
