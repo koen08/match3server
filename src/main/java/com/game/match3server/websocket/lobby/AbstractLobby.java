@@ -12,7 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class AbstractLobby {
     private static final Map<CMD, Object> beans = new HashMap<>();
-    private static final Map<String, WebSocketSession> webSocketSessionMap = new ConcurrentHashMap<>();
+    private static final Map<String, WebSocketSession> webSocketSessionMap = new HashMap<>();
 
 
     public Object getObject(CMD cmd) {

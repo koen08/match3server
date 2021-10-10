@@ -38,7 +38,7 @@ public class MyHandler extends AbstractLobby implements WebSocketHandler {
     @Override
     public void handleTransportError(WebSocketSession webSocketSession, Throwable throwable) throws Exception {
         log.error("webSessionError: {}", webSocketSession);
-        log.error(throwable.getMessage());
+        throwable.printStackTrace();
         log.error(throwable);
     }
 
