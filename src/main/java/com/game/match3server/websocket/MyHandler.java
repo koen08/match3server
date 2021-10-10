@@ -37,13 +37,16 @@ public class MyHandler extends AbstractLobby implements WebSocketHandler {
 
     @Override
     public void handleTransportError(WebSocketSession webSocketSession, Throwable throwable) throws Exception {
-
+        log.error("webSessionError: {}", webSocketSession);
+        log.error(throwable.getMessage());
+        log.error(throwable);
     }
 
     @Override
     public void afterConnectionClosed(WebSocketSession webSocketSession, CloseStatus closeStatus) throws Exception {
         remove(Objects.requireNonNull(webSocketSession.getPrincipal()).getName());
         log.info("User was disconnected: {}", webSocketSession.getPrincipal().getName());
+        log.info("Reason: {}",closeStatus.getReason());
     }
 
     @Override
