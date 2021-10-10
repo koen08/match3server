@@ -6,6 +6,7 @@ import com.game.match3server.web.ErrorCode;
 import com.game.match3server.web.GenericResponse;
 import com.game.match3server.web.RequestParam;
 import com.game.match3server.web.Status;
+import com.game.match3server.websocket.CMD;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
@@ -18,6 +19,6 @@ public class InvitationsLobby extends AbstractLobby implements Lobby{
     @Override
     public GenericResponse<?> process(Object obj, Principal principal) throws IOException {
         List<FriendEntity> friendEntityList = friendsLobbyService.getUserToById(principal);
-        return new GenericResponse<>(friendEntityList);
+        return new GenericResponse<>(friendEntityList, CMD.GET_INVITED.name());
     }
 }

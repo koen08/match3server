@@ -1,10 +1,7 @@
 package com.game.match3server.config;
 
 import com.game.match3server.websocket.MyHandler;
-import com.game.match3server.websocket.lobby.EnterLobby;
-import com.game.match3server.websocket.lobby.FriendLobbyInvite;
-import com.game.match3server.websocket.lobby.InvitationsLobby;
-import com.game.match3server.websocket.lobby.SearchFriendLobby;
+import com.game.match3server.websocket.lobby.*;
 import com.google.gson.Gson;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,7 +18,7 @@ public class WebSocketConfig implements WebSocketConfigurer {
 
     @Bean
     public WebSocketHandler myHandler() {
-        return new MyHandler(enterLobby(), searchFriendLobby(), friendLobbyInvite(), invitationsLobby());
+        return new MyHandler(enterLobby(), searchFriendLobby(), friendLobbyInvite(), invitationsLobby(), pingPongLobby());
     }
 
     @Bean
@@ -42,6 +39,11 @@ public class WebSocketConfig implements WebSocketConfigurer {
     @Bean
     public InvitationsLobby invitationsLobby() {
         return new InvitationsLobby();
+    }
+
+    @Bean
+    public PingPongLobby pingPongLobby() {
+        return new PingPongLobby();
     }
 }
 

@@ -8,17 +8,19 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class GenericResponse<T> {
+    private String cmd;
     private Status status;
     T data;
 
-    public GenericResponse(Status status) {
+    public GenericResponse(Status status, String cmd) {
         this.status = status;
     }
 
-    public GenericResponse(Boolean ok){
+    public GenericResponse(Boolean ok, String cmd){
         if (ok){
             this.status = new Status(ErrorCode.OK, "Ok");
         }
+        this.cmd = cmd;
     }
 
     public GenericResponse(T data) {
@@ -31,8 +33,15 @@ public class GenericResponse<T> {
         }
     }
 
-    public GenericResponse(T data, String okMsg) {
-        this.data = data;
-        this.status = new Status(ErrorCode.OK, okMsg);
+    public GenericResponse(T data, String cmd) {
+        if (data instanceof Status){
+            Status status = (Status) data;
+            this.status = new Status(status.getCode(), status.getMessage());
+            this.cmd = cmd;
+        } else {
+            this.data = data;
+            this.status = new Status(ErrorCode.OK, "Ok");
+            this.cmd = cmd;
+        }
     }
 }

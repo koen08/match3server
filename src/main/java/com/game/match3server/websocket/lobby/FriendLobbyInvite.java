@@ -6,6 +6,7 @@ import com.game.match3server.web.ErrorCode;
 import com.game.match3server.web.GenericResponse;
 import com.game.match3server.web.RequestParam;
 import com.game.match3server.web.Status;
+import com.game.match3server.websocket.CMD;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
@@ -19,9 +20,9 @@ public class FriendLobbyInvite extends AbstractLobby implements Lobby{
         RequestParam webSocketParam = (RequestParam) GsonHelper.fromJson(obj, RequestParam.class);
         FriendEntity friendEntity = friendsLobbyService.invite(webSocketParam.getParam(), principal);
         if (friendEntity == null){
-            return new GenericResponse<>(new Status(ErrorCode.REPEAT_DATA, "The invitation has already been sent"));
+            return new GenericResponse<>(new Status(ErrorCode.REPEAT_DATA, "The invitation has already been sent"), CMD.INVITE_FRIEND.name());
         }
         sendMsg(webSocketParam.getParam(), new GenericResponse<>(friendEntity));
-        return new GenericResponse<>(true);
+        return new GenericResponse<>(true, CMD.INVITE_FRIEND.name());
     }
 }

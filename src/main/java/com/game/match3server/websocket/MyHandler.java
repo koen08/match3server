@@ -13,17 +13,20 @@ import java.util.concurrent.ConcurrentHashMap;
 public class MyHandler extends AbstractLobby implements WebSocketHandler {
     private static final Logger log = LogManager.getLogger(MyHandler.class);
 
-    public MyHandler(EnterLobby enterLobby, SearchFriendLobby searchFriendLobby, FriendLobbyInvite friendLobbyInvite, InvitationsLobby invitationsLobby) {
+    public MyHandler(EnterLobby enterLobby, SearchFriendLobby searchFriendLobby, FriendLobbyInvite friendLobbyInvite,
+                     InvitationsLobby invitationsLobby, PingPongLobby pingPongLobby) {
         register(CMD.ENTER_LOBBY, enterLobby);
         register(CMD.SEARCH_FRIEND, searchFriendLobby);
         register(CMD.INVITE_FRIEND, friendLobbyInvite);
         register(CMD.GET_INVITED, invitationsLobby);
+        register(CMD.PING_PONG, pingPongLobby);
     }
 
     @Override
     public void afterConnectionEstablished(WebSocketSession webSocketSession) throws Exception {
         put(Objects.requireNonNull(webSocketSession.getPrincipal()).getName(), webSocketSession);
         log.info("User was connected: {}", webSocketSession.getPrincipal().getName());
+        log.info("Count online user: {}", getOnlineUserSize());
         //  SecurityContextHolder.getContext().setAuthentication((Authentication) webSocketSession.getPrincipal());
     }
 
@@ -38,14 +41,14 @@ public class MyHandler extends AbstractLobby implements WebSocketHandler {
     @Override
     public void handleTransportError(WebSocketSession webSocketSession, Throwable throwable) throws Exception {
         log.error("webSessionError: {}", webSocketSession);
-        throwable.printStackTrace();
-        log.error(throwable);
+        log.error(throwable.getCause());
     }
 
     @Override
     public void afterConnectionClosed(WebSocketSession webSocketSession, CloseStatus closeStatus) throws Exception {
         remove(Objects.requireNonNull(webSocketSession.getPrincipal()).getName());
         log.info("User was disconnected: {}", webSocketSession.getPrincipal().getName());
+        log.error("User webSession disconnected: {}", webSocketSession);
         log.info("Reason: {}",closeStatus.getReason());
     }
 

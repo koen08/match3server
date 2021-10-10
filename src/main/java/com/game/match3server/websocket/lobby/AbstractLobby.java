@@ -27,6 +27,10 @@ public abstract class AbstractLobby {
         webSocketSessionMap.put(login, webSocketSession);
     }
 
+    public int getOnlineUserSize(){
+        return webSocketSessionMap.size();
+    }
+
     public void remove(String login) {
         webSocketSessionMap.remove(login);
     }

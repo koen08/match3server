@@ -5,6 +5,7 @@ import com.game.match3server.dao.entity.UserProfile;
 import com.game.match3server.service.UserService;
 import com.game.match3server.web.GenericResponse;
 import com.game.match3server.web.UserProfileDto;
+import com.game.match3server.websocket.CMD;
 import net.bytebuddy.asm.Advice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -18,6 +19,6 @@ public class EnterLobby implements Lobby {
 
     @Override
     public GenericResponse<UserProfileDto> process(Object obj, Principal principal) {
-        return new GenericResponse<>(userService.getUserProfileByNickNameWithAuth(principal));
+        return new GenericResponse<>(userService.getUserProfileByNickNameWithAuth(principal), CMD.ENTER_LOBBY.name());
     }
 }
