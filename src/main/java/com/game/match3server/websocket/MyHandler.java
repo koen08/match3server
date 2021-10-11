@@ -14,12 +14,15 @@ public class MyHandler extends AbstractLobby implements WebSocketHandler {
     private static final Logger log = LogManager.getLogger(MyHandler.class);
 
     public MyHandler(EnterLobby enterLobby, SearchFriendLobby searchFriendLobby, FriendLobbyInvite friendLobbyInvite,
-                     InvitationsLobby invitationsLobby, PingPongLobby pingPongLobby) {
+                     InvitationsLobby invitationsLobby, PingPongLobby pingPongLobby, AcceptFriendLobby acceptFriendLobby,
+                     AcceptedFriends acceptedFriends) {
         register(CMD.ENTER_LOBBY, enterLobby);
         register(CMD.SEARCH_FRIEND, searchFriendLobby);
         register(CMD.INVITE_FRIEND, friendLobbyInvite);
         register(CMD.GET_INVITED, invitationsLobby);
         register(CMD.PING_PONG, pingPongLobby);
+        register(CMD.ACCEPT_FRIEND, acceptFriendLobby);
+        register(CMD.MY_FRIENDS, acceptedFriends);
     }
 
     @Override

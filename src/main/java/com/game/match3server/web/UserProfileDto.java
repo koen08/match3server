@@ -22,4 +22,5 @@ public class UserProfileDto {
     private int rating;
     private List<TowerUser> towers;
     private List<SpaceshipInfo> spaceships;
+    private boolean invitedFriend;
 }

@@ -1,11 +1,10 @@
 package com.game.match3server.dao;
 
+import com.game.match3server.dao.entity.UserEntity;
 import com.game.match3server.dao.entity.UserProfile;
 import com.game.match3server.dao.repo.UserProfileRepository;
-import com.game.match3server.service.AuthorizationService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -14,9 +13,11 @@ import java.util.Optional;
 public class UserProfileDao {
     private static final Logger log = LogManager.getLogger(UserServiceDao.class);
     private final UserProfileRepository userProfileRepository;
+    private final UserServiceDao userServiceDao;
 
-    public UserProfileDao(UserProfileRepository userProfileRepository) {
+    public UserProfileDao(UserProfileRepository userProfileRepository, UserServiceDao userServiceDao) {
         this.userProfileRepository = userProfileRepository;
+        this.userServiceDao = userServiceDao;
     }
 
     public void save(UserProfile userProfile){
@@ -33,6 +34,10 @@ public class UserProfileDao {
         }
         log.info("getByUserId finish: {}", userProfile);
         return userProfile;
+    }
+    public UserProfile getByNickname(String nickname){
+        UserEntity userEntity = userServiceDao.getByNickname(nickname);
+        return getByUserId(userEntity.getId());
     }
     public void removeAll(){
         userProfileRepository.deleteAll();

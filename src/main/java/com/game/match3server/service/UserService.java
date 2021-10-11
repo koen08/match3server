@@ -1,5 +1,6 @@
 package com.game.match3server.service;
 
+import com.game.match3server.dao.FriendServiceDao;
 import com.game.match3server.dao.UserProfileDao;
 import com.game.match3server.dao.UserServiceDao;
 import com.game.match3server.dao.entity.SpaceshipInfo;
@@ -8,6 +9,7 @@ import com.game.match3server.dao.entity.UserEntity;
 import com.game.match3server.dao.entity.UserProfile;
 import com.game.match3server.web.UserPage;
 import com.game.match3server.web.UserProfileDto;
+import com.game.match3server.websocket.lobby.FriendLobbyInvite;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,10 +22,13 @@ import java.util.List;
 public class UserService {
     final UserServiceDao userServiceDao;
     final UserProfileDao userProfileDao;
+    final
+    FriendServiceDao friendServiceDao;
 
-    public UserService(UserServiceDao userServiceDao, UserProfileDao userProfileDao) {
+    public UserService(UserServiceDao userServiceDao, UserProfileDao userProfileDao, FriendServiceDao friendServiceDao) {
         this.userServiceDao = userServiceDao;
         this.userProfileDao = userProfileDao;
+        this.friendServiceDao = friendServiceDao;
     }
 
     public UserProfileDto getUserProfile(String nickname) {
@@ -32,7 +37,7 @@ public class UserService {
 
     public UserPage getUserPage(String nickname) {
         UserEntity userEntity = userServiceDao.getByNickname(nickname);
-        if (userEntity == null){
+        if (userEntity == null) {
             return null;
         }
         return new UserPage(userEntity.getLogin(), userEntity.getNickName());
@@ -47,12 +52,16 @@ public class UserService {
         return getUserProfile(userEntity.getNickName());
     }
 
+    public UserEntity getByPrincipal(Principal principal){
+        return userServiceDao.findByLogin(principal.getName());
+    }
+
     private UserProfileDto getUserProfile(UserEntity userEntity) {
         UserProfile userProfile = userProfileDao.getByUserId(userEntity.getId());
         return new UserProfileDto(
                 userEntity.getId(), userEntity.getLogin(), userEntity.getNickName(), userProfile.getCoin(), userProfile.getGems(), userProfile.getSpaceShipActiveId(),
                 userProfile.getLastLevel(), userProfile.getRating(), createTowerList(userProfile.getTowers()),
-                createSpaceShipInfo(userProfile.getSpaceships())
+                createSpaceShipInfo(userProfile.getSpaceships()), friendServiceDao.checkInvited(userEntity.getId())
         );
     }
 

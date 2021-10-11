@@ -6,5 +6,8 @@ public enum CMD {
     INVITE_FRIEND,
     SEARCH_FRIEND,
     GET_INVITED,
-    PING_PONG
+    PING_PONG,
+    INVITED_ALERT,
+    ACCEPT_FRIEND,
+    MY_FRIENDS
 }

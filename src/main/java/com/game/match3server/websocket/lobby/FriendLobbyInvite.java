@@ -22,7 +22,7 @@ public class FriendLobbyInvite extends AbstractLobby implements Lobby{
         if (friendEntity == null){
             return new GenericResponse<>(new Status(ErrorCode.REPEAT_DATA, "The invitation has already been sent"), CMD.INVITE_FRIEND.name());
         }
-        sendMsg(webSocketParam.getParam(), new GenericResponse<>(friendEntity));
+        sendMsg(webSocketParam.getParam(), new GenericResponse<>(friendEntity,  CMD.INVITED_ALERT.name()));
         return new GenericResponse<>(true, CMD.INVITE_FRIEND.name());
     }
 }

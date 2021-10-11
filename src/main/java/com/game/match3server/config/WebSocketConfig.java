@@ -18,7 +18,8 @@ public class WebSocketConfig implements WebSocketConfigurer {
 
     @Bean
     public WebSocketHandler myHandler() {
-        return new MyHandler(enterLobby(), searchFriendLobby(), friendLobbyInvite(), invitationsLobby(), pingPongLobby());
+        return new MyHandler(enterLobby(), searchFriendLobby(), friendLobbyInvite(),
+                invitationsLobby(), pingPongLobby(),acceptFriendLobby(),acceptedFriends());
     }
 
     @Bean
@@ -44,6 +45,16 @@ public class WebSocketConfig implements WebSocketConfigurer {
     @Bean
     public PingPongLobby pingPongLobby() {
         return new PingPongLobby();
+    }
+
+    @Bean
+    public AcceptFriendLobby acceptFriendLobby() {
+        return new AcceptFriendLobby();
+    }
+
+    @Bean
+    public AcceptedFriends acceptedFriends() {
+        return new AcceptedFriends();
     }
 }
 
