@@ -14,6 +14,6 @@ public class SearchFriendLobby implements Lobby{
     @Override
     public GenericResponse<?> process(Object var, Principal principal) {
         RequestParam webSocketParam = (RequestParam) GsonHelper.fromJson(var, RequestParam.class);
-        return new GenericResponse<>(userService.getUserPage(webSocketParam.getParam()), CMD.SEARCH_FRIEND.name());
+        return new GenericResponse<>(userService.getUserPageByNick(webSocketParam.getParam()), CMD.SEARCH_FRIEND.name());
     }
 }

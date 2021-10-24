@@ -21,8 +21,7 @@ public class FriendServiceDao {
         return friendEntityRepository.findByUserFromAndUserTo(userFrom, userTo);
     }
     public List<FriendEntity> getListInvited(String userId){
-        UserEntity userEntity = userServiceDao.findById(userId);
-        return friendEntityRepository.findAllByUserTo(userEntity.getNickName());
+        return friendEntityRepository.findAllByUserTo(userId);
     }
     public boolean checkInvited(String userId){
         return friendEntityRepository.findAllByUserTo(userId) != null;

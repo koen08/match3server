@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class UserPage {
-    private String id;
-    private String nickName;
+public class UserPageInvited {
+    private long id;
+    private UserPage user;
 }

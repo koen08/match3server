@@ -35,12 +35,20 @@ public class UserService {
         return getUserProfile(userServiceDao.getByNickname(nickname));
     }
 
-    public UserPage getUserPage(String nickname) {
+    public UserPage getUserPageByNick(String nickname) {
         UserEntity userEntity = userServiceDao.getByNickname(nickname);
         if (userEntity == null) {
             return null;
         }
-        return new UserPage(userEntity.getLogin(), userEntity.getNickName());
+        return new UserPage(userEntity.getId(), userEntity.getNickName());
+    }
+
+    public UserProfile getUserProfileById(String id){
+        return userProfileDao.getByUserId(id);
+    }
+
+    public UserEntity getUserEntityById(String id){
+        return userServiceDao.findById(id);
     }
 
     public UserProfileDto getUserProfile() {
@@ -48,12 +56,12 @@ public class UserService {
     }
 
     public UserProfileDto getUserProfileByNickNameWithAuth(Principal principal) {
-        UserEntity userEntity = userServiceDao.findByLogin(principal.getName());
+        UserEntity userEntity = userServiceDao.findById(principal.getName());
         return getUserProfile(userEntity.getNickName());
     }
 
     public UserEntity getByPrincipal(Principal principal){
-        return userServiceDao.findByLogin(principal.getName());
+        return userServiceDao.findById(principal.getName());
     }
 
     private UserProfileDto getUserProfile(UserEntity userEntity) {

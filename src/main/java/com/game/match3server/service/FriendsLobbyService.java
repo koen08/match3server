@@ -7,11 +7,14 @@ import com.game.match3server.dao.entity.FriendEntity;
 import com.game.match3server.dao.entity.UserEntity;
 import com.game.match3server.dao.entity.UserProfile;
 import com.game.match3server.web.ListResponse;
+import com.game.match3server.web.UserPage;
+import com.game.match3server.web.UserPageInvited;
 import com.game.match3server.web.UserProfileDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -22,31 +25,33 @@ public class FriendsLobbyService {
     @Autowired
     FriendServiceDao friendServiceDao;
     @Autowired
-    UserProfileDao userProfileDao;
-    @Autowired
     UserService userService;
 
-    public FriendEntity invite(String login, Principal principal) { //Если какое то исключение происходит то все вылетает
-        UserEntity userEntity = userServiceDao.findByLogin(principal.getName());
-        UserEntity friend = userServiceDao.findByLogin(login);
-        if (friendServiceDao.findByUserToId(userEntity.getNickName(), friend.getNickName()) != null) {
+    public FriendEntity invite(String id, Principal principal) { //Если какое то исключение происходит то все вылетает
+        if (friendServiceDao.findByUserToId(principal.getName(), id) != null) {
             return null;
         }
-        return friendServiceDao.save(new FriendEntity(userEntity.getNickName(), friend.getNickName()));
+        return friendServiceDao.save(new FriendEntity(principal.getName(), id));
     }
 
-    public List<FriendEntity> getUserToById(Principal principal) {
-        UserEntity userEntity = userServiceDao.findByLogin(principal.getName());
-        return friendServiceDao.getListInvited(userEntity.getId());
+    public List<UserPageInvited> getUserToById(Principal principal) {
+        List<FriendEntity> friendEntityList = friendServiceDao.getListInvited(principal.getName());
+        List<UserPageInvited> userPageInviteds = new ArrayList<>();
+        for (FriendEntity friendEntity : friendEntityList) {
+            UserEntity user = userService.getUserEntityById(friendEntity.getUserFrom());
+            userPageInviteds.add(new UserPageInvited(friendEntity.getId(), new UserPage(user.getId(), user.getNickName())));
+        }
+        return userPageInviteds;
     }
 
-    public List<String> getMyFriends(Principal principal){
-        UserEntity userEntity = userService.getByPrincipal(principal);
-        return Arrays.asList(userProfileDao.getByUserId(userEntity.getId()).getFriends());
+    public List<String> getMyFriends(Principal principal) {
+    /*    UserEntity userEntity = userService.getByPrincipal(principal);
+        return Arrays.asList(userProfileDao.getByUserId(userEntity.getId()).getFriends());*/
+        return null;
     }
 
     public void acceptFriend(long inviteId) {
-        FriendEntity friendEntity = friendServiceDao.getById(inviteId);
+        /*FriendEntity friendEntity = friendServiceDao.getById(inviteId);
         UserProfile my = userProfileDao.getByNickname(friendEntity.getUserTo());
         UserProfile friend = userProfileDao.getByNickname(friendEntity.getUserFrom());
         List<String> myFriends = Arrays.asList(my.getFriends());
@@ -56,7 +61,7 @@ public class FriendsLobbyService {
         myFriends.add(my.getId());
         friend.setFriends(myFriends.toArray(new String[0]));
         userProfileDao.save(my);
-        userProfileDao.save(friend);
+        userProfileDao.save(friend);*/
     }
 
 }
