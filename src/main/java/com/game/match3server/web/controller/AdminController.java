@@ -7,12 +7,18 @@ import com.game.match3server.web.AuthDto;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -26,6 +32,7 @@ public class AdminController {
     UserServiceDao userServiceDao;
     @Autowired
     UserProfileDao userProfileDao;
+
     @GetMapping("/time")
     @ResponseStatus(HttpStatus.OK)
     public String getCurrentTime() {
@@ -79,7 +86,7 @@ public class AdminController {
         log.info("start request with GET [/user/all]");
         List<UserEntity> list = userServiceDao.getAllUser();
         List<AuthDto> authDtos = new ArrayList<>();
-        for (int i = 0; i < list.size(); i++){
+        for (int i = 0; i < list.size(); i++) {
             AuthDto authDto = new AuthDto();
             authDto.setId(list.get(i).getId());
             authDto.setLogin(list.get(i).getLogin());
@@ -88,6 +95,19 @@ public class AdminController {
         }
         model.addAttribute("userList", authDtos);
         return "userlist";
+    }
+
+    @RequestMapping(value = "/doc", method = RequestMethod.GET, produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public void getAllUser(HttpServletResponse response) throws IOException {
+        File file = new File("src/main/doc/doc.pdf");
+        byte[] data = Files.readAllBytes(Paths.get(file.getAbsolutePath()));
+        response.setContentType("application/pdf");
+        response.setHeader("Content-disposition", "attachment; filename=" + file.getName());
+        response.setContentLength(data.length);
+
+        response.getOutputStream().write(data);
+        response.getOutputStream().flush();
     }
 
 

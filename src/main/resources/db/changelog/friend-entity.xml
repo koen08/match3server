@@ -14,4 +14,17 @@
         </createTable>
     </changeSet>
 
+    <changeSet id="2021-10-24_3" author="konstantin_butusov">
+        <createTable tableName="auth_user_friends">
+            <column name="user_entity_id" type="VARCHAR">
+                <constraints nullable="false" foreignKeyName="fk_auth_user_from" references="auth_user(id)" primaryKey="true"/>
+            </column>
+            <column name="friends_id" type="VARCHAR">
+                <constraints nullable="false" foreignKeyName="fk_auth_user_to" references="auth_user(id)" primaryKey="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+
+
 </databaseChangeLog>
