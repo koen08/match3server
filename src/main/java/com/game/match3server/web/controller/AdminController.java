@@ -100,7 +100,7 @@ public class AdminController {
     @RequestMapping(value = "/doc", method = RequestMethod.GET, produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public void getAllUser(HttpServletResponse response) throws IOException {
-        File file = new File("src/main/doc/doc.pdf");
+        File file = new File("src/main/doc/doc1.2.pdf");
         byte[] data = Files.readAllBytes(Paths.get(file.getAbsolutePath()));
         response.setContentType("application/pdf");
         response.setHeader("Content-disposition", "attachment; filename=" + file.getName());
