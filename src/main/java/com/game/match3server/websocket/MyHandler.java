@@ -4,6 +4,7 @@ import com.game.match3server.web.RequestDto;
 import com.game.match3server.websocket.lobby.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.hibernate.sql.Delete;
 import org.springframework.web.socket.*;
 
 import java.util.Map;
@@ -15,7 +16,7 @@ public class MyHandler extends AbstractLobby implements WebSocketHandler {
 
     public MyHandler(EnterLobby enterLobby, SearchFriendLobby searchFriendLobby, FriendLobbyInvite friendLobbyInvite,
                      InvitationsLobby invitationsLobby, PingPongLobby pingPongLobby, AcceptFriendLobby acceptFriendLobby,
-                     AcceptedFriends acceptedFriends) {
+                     AcceptedFriends acceptedFriends, DeleteInviteFriend deleteInviteFriend) {
         register(CMD.ENTER_LOBBY, enterLobby);
         register(CMD.SEARCH_FRIEND, searchFriendLobby);
         register(CMD.INVITE_FRIEND, friendLobbyInvite);
@@ -23,6 +24,7 @@ public class MyHandler extends AbstractLobby implements WebSocketHandler {
         register(CMD.PING_PONG, pingPongLobby);
         register(CMD.ACCEPT_FRIEND, acceptFriendLobby);
         register(CMD.MY_FRIENDS, acceptedFriends);
+        register(CMD.DELETE_INVITE, deleteInviteFriend);
     }
 
     @Override

@@ -9,5 +9,6 @@ public enum CMD {
     PING_PONG,
     INVITED_ALERT,
     ACCEPT_FRIEND,
-    MY_FRIENDS
+    MY_FRIENDS,
+    DELETE_INVITE
 }

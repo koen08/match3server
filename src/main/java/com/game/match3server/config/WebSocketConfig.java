@@ -19,7 +19,7 @@ public class WebSocketConfig implements WebSocketConfigurer {
     @Bean
     public WebSocketHandler myHandler() {
         return new MyHandler(enterLobby(), searchFriendLobby(), friendLobbyInvite(),
-                invitationsLobby(), pingPongLobby(),acceptFriendLobby(),acceptedFriends());
+                invitationsLobby(), pingPongLobby(),acceptFriendLobby(),acceptedFriends(), deleteInviteFriend());
     }
 
     @Bean
@@ -55,6 +55,11 @@ public class WebSocketConfig implements WebSocketConfigurer {
     @Bean
     public AcceptedFriends acceptedFriends() {
         return new AcceptedFriends();
+    }
+
+    @Bean
+    public DeleteInviteFriend deleteInviteFriend() {
+        return new DeleteInviteFriend();
     }
 }
 

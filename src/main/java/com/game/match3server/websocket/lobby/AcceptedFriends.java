@@ -25,6 +25,6 @@ public class AcceptedFriends implements Lobby{
     @Override
     public GenericResponse<?> process(Object obj, Principal principal) throws IOException {
         List<UserPage> friendEntities = friendsLobbyService.getMyFriends(principal);
-        return new GenericResponse<>(friendEntities, CMD.MY_FRIENDS.name());
+        return new GenericResponse<>(new ListResponse<>(friendEntities), CMD.MY_FRIENDS.name());
     }
 }

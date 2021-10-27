@@ -1,21 +1,17 @@
 package com.game.match3server.service;
 
 import com.game.match3server.dao.FriendServiceDao;
-import com.game.match3server.dao.UserProfileDao;
 import com.game.match3server.dao.UserServiceDao;
 import com.game.match3server.dao.entity.*;
 import com.game.match3server.exception.CommonException;
 import com.game.match3server.web.*;
-import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.security.Principal;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 
 @Service
 public class FriendsLobbyService {
@@ -70,9 +66,13 @@ public class FriendsLobbyService {
         return friendsEntities.size() > 0;
     }
 
+    public FriendEntity getInviteFriendById(Long id){
+        return friendServiceDao.getById(id);
+    }
+
     @Transactional
     public void acceptFriend(Long inviteId) throws CommonException { // Переписать!
-        FriendEntity friendEntity = friendServiceDao.getById(inviteId);
+        FriendEntity friendEntity = getInviteFriendById(inviteId);
         if (friendEntity == null) {
             throw new CommonException("inviteId not found", ErrorCode.BAD_REQUEST);
         }
